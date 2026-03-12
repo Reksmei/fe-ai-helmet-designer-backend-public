@@ -8,18 +8,18 @@ The Formula E AI Helmet Designer is an interactive Generative Media on Google Cl
 
 <img src="https://storage.googleapis.com/fe-demo-branding/demo-architecture.webp" alt="Architecture Breakdown" align="right" width="450">
 
-The full application is split into a React (Next.js) frontend and a Python (FastAPI) backend (which you're find out more about in this public repository). The backend acts as an orchestrator, securely connecting user inputs to a suite of Vertex AI models and managing asset storage via Google Cloud Storage.
+The full application is split into a React (Next.js) frontend and a Python (FastAPI) backend (which you're find out more about in this public repository), all deployed on a highly scalable Cloud Run instance. The backend acts as an orchestrator, securely connecting user inputs to a suite of Vertex AI models and managing asset storage via Google Cloud Storage.
 
 1. **Gemini 3 Flash:** Takes the user's basic theme (e.g., "Ocean Waves") and uses its advanced reasoning capabilities to write a detailed, highly-optimized prompt.
 2. **Imagen 4:** Generates high-fidelity, artistic motif designs using its advanced image generation capabilities across various artistic styles.
-3. **Nano Banana 2:** Acts as the image editor and compositor, seamlessly wrapping the chosen motif and a selected racing team logo onto a blank Formula E helmet template.
+3. **Nano Banana 2:** Acts as the image editor and compositor, seamlessly wrapping the chosen motif and a the user's favorite racing team's logo onto a blank Formula E helmet template.
 4. **Veo 3.1:** Animates the final 2D image into a seamless, rotating 3D product ad using enhanced camera controls and image-to-video capabilities.
 
 *Once generated, all digital assets (images and videos) are uploaded to Cloud Storage and presented to the user via scannable QR codes for easy download as digital souvenirs.*
 
 <br clear="all"/>
 
-## Use Cases with Nano Banana 2.
+## Use Cases with Nano Banana 2
 
 Nano Banana 2 is Google Cloud's state-of-the-art image generation and editing model, balancing photorealistisic quality with speed. Beyond this helmet design demo, Nano Banana 2 unlocks powerful enterprise use cases:
 

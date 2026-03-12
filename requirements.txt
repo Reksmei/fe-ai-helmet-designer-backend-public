@@ -1,0 +1,10 @@
+dotenv
+google-genai
+uuid
+fastapi
+uvicorn
+python-multipart
+google-cloud-storage
+pydantic
+qrcode
+pillow

@@ -171,7 +171,7 @@ async def helmet_editor(
     reference_path: str = Form("../Frontend/public/reference-images/formula-e-helmet-blank-helmet.jpg")
 ):
     """
-    Edits your Imagen generated motif design and team logo with Gemini 1.5 Flash and uploads it to Cloud Storage.
+    Edits your Imagen generated motif design and team logo with Gemini 3 Flash and uploads it to Cloud Storage.
 
     Args: 
       motif_url:  The URL of the generated motif

@@ -26,12 +26,6 @@ client = genai.Client(
     location=os.getenv("LOCATION")
 )
 
-# Initialize client for Gemini Developer API (Fallback)
-dev_client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY"),
-    vertexai=False
-)
-
 # To get a helmet image with just the forward facing angle
 def helmet_editor(
     motif_url: str = Form(...),
@@ -64,36 +58,20 @@ def helmet_editor(
         logo_bytes = get_image_bytes(logo_path)
         ref_bytes = get_image_bytes(reference_path)
         
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    helmet_editor_prompt,
-                    types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
+        response = client.models.generate_content(
+            model='gemini-3.1-flash-image-preview',
+            contents=[
+            helmet_editor_prompt,
+            types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
+            types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
+            types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
                 ],
                 config = types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
                     image_config=types.ImageConfig(aspect_ratio="4:3"),
                 ),
             )
-        except Exception as primary_err:
-            print(f"WARNING: Vertex AI failed: {str(primary_err)}. Retrying with Developer API...")
-            response = dev_client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    helmet_editor_prompt,
-                    types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
-                ],
-                config = types.GenerateContentConfig(
-                    response_modalities=["IMAGE"],
-                    image_config=types.ImageConfig(aspect_ratio="4:3"),
-                ),
-            )
-        
+            
         generated_bytes = None
         if response.candidates and response.candidates[0].content.parts:
             for part in response.candidates[0].content.parts:
@@ -146,36 +124,20 @@ def multi_angle_helmet_editor(
         logo_bytes = get_image_bytes(logo_path)
         ref_bytes = get_image_bytes(reference_path) # Compresses the 1.3MB PNG to JPEG
         
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    helmet_editor_prompt,
-                    types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
+        response = client.models.generate_content(
+            model='gemini-3.1-flash-image-preview',
+            contents=[
+                helmet_editor_prompt,
+                types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
+                types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
+                types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
                 ],
                 config = types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
                     image_config = types.ImageConfig(aspect_ratio="16:9"),
                 ),
             )
-        except Exception as primary_err:
-            print(f"WARNING: Vertex AI failed: {str(primary_err)}. Retrying with Developer API...")
-            response = dev_client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    helmet_editor_prompt,
-                    types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
-                ],
-                config = types.GenerateContentConfig(
-                    response_modalities=["IMAGE"],
-                    image_config = types.ImageConfig(aspect_ratio="16:9"),
-                ),
-            )
-        
+            
         generated_bytes = None
         if response.candidates and response.candidates[0].content.parts:
             for part in response.candidates[0].content.parts:
@@ -231,30 +193,12 @@ async def net_generator(
         # Keep high quality (95) for the reference net template to ensure numbers are visible
         ref_bytes = get_image_bytes(reference_path, quality=95)
 
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    prompt,
-                    types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
-                ],
-                config = types.GenerateContentConfig(
-                    response_modalities=["IMAGE"],
-                    image_config = types.ImageConfig(
-                        aspect_ratio="16:9",
-                        image_size="2K"
-                    ),
-                ),
-            )
-        except Exception as primary_err:
-            print(f"WARNING: Vertex AI failed: {str(primary_err)}. Retrying with Developer API...")
-            response = dev_client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    prompt,
-                    types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
+        response = client.models.generate_content(
+            model='gemini-3.1-flash-image-preview',
+            contents=[
+                prompt,
+                types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"),
+                types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
                 ],
                 config = types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
@@ -331,7 +275,6 @@ def prompt_rewriter(prompt: str = Form(...)):
                 Don't say at the end, anything along the lines of "would you like me to try another one?
                 '''
     try:
-        try:
             print("DEBUG: Attempting prompt rewrite with Vertex AI...")
             response = client.models.generate_content(
                 model="gemini-3-flash-preview",
@@ -342,17 +285,7 @@ def prompt_rewriter(prompt: str = Form(...)):
                     max_output_tokens=2000,
                 )
             )
-        except Exception as primary_err:
-            print(f"WARNING: Primary Vertex AI call failed in prompt_rewriter: {str(primary_err)}. Retrying with Developer API...")
-            response = dev_client.models.generate_content(
-                model="gemini-3-flash-preview",
-                contents=[prompt],
-                config=types.GenerateContentConfig(
-                    system_instruction=system_instruction,
-                    temperature=1.2,
-                    max_output_tokens=2000,
-                )
-            )
+
         return {"rewritten_prompt": response.text}
     except Exception as e:
         print(f"ERROR: Prompt rewriting failed: {str(e)}")

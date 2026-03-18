@@ -8,3 +8,4 @@ google-cloud-storage
 pydantic
 qrcode
 pillow
+fpdf2

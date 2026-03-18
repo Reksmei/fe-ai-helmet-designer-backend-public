@@ -26,12 +26,6 @@ client = genai.Client(
     location=os.getenv("LOCATION")
 )
 
-# Initialize client for Gemini Developer API (Fallback)
-dev_client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY"),
-    vertexai=False
-)
-
 async def helmet_animator(image_url: str = Form(...)):
     """
     Generates a video of the helmet spinning using Veo and uploads it to GCS

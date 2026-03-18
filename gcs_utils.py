@@ -16,15 +16,15 @@ def upload_to_gcs(data: bytes, content_type: str = "image/png") -> str:
     
     if "pdf" in content_type:
         ext = "pdf"
-        bucket_name = "helmet_nets_output"
+        bucket_name = # Your GCS bucket for helmet net pdfs
         filename = f"helmet_net_{uid}.{ext}"
     elif "jpeg" in content_type or "jpg" in content_type:
         ext = "jpg"
-        bucket_name = "helmet-images-output"
+        bucket_name = # Your GCS bucket for helmet images
         filename = f"helmet_image_{uid}.{ext}"
     else:
         ext = "png"
-        bucket_name = "helmet-images-output"
+        bucket_name = # Your GCS bucket for helmet images
         filename = f"helmet_image_{uid}.{ext}"
 
     bucket = storage_client.bucket(bucket_name)
@@ -36,7 +36,7 @@ def upload_video_to_gcs(video_data: bytes, content_type: str = "video/mp4") -> s
     """
     Uploads generated videos to Cloud Storage with unique name and returns public URL
     """
-    bucket_name = "helmet_animation_output"
+    bucket_name = # Your GCS bucket for helmet videos
     bucket = storage_client.bucket(bucket_name)
     filename = f"helmet_animation_{uuid.uuid4()}.mp4"
     blob = bucket.blob(filename)

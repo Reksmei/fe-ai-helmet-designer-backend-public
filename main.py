@@ -22,24 +22,6 @@ from fpdf import FPDF
 
 load_dotenv()
 
-# Initialize client for Vertex AI
-client = genai.Client(
-    vertexai=True, 
-    project=os.getenv("PROJECT_ID"), 
-    location=os.getenv("LOCATION")
-)
-
-# Initialize client for Gemini Developer API (Fallback)
-dev_client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY"),
-    vertexai=False
-)
-
-# Create Cloud Storage Client
-storage_client = storage.Client(project=os.getenv("PROJECT_ID"))
-bucket_name = os.getenv("BUCKET_NAME")
-bucket = storage_client.bucket(bucket_name)
-
 # Initialize FastAPI
 app = FastAPI()
 

@@ -8,7 +8,7 @@ The Formula E AI Helmet Designer is an interactive Generative Media application 
 
 <img src="https://storage.googleapis.com/fe-demo-branding/demo-architecture.webp" alt="Architecture Breakdown" align="right" width="450">
 
-The full application is split into a React (Next.js) frontend and a Python (FastAPI) backend (which you're find out more about in this public repository), all deployed on a highly scalable Cloud Run instance. The backend acts as an orchestrator, securely connecting user inputs to a suite of Vertex AI models and managing asset storage via Google Cloud Storage.
+The full application is split into a React (Next.js) frontend and a Python (FastAPI) backend (which you're find out more about in this public repository), all deployed on a highly scalable Cloud Run instance. The backend acts as an orchestrator, securely connecting user inputs to a suite of Google Cloud Agent Platform models and managing asset storage via Cloud Storage.
 
 1. **Gemini 3 Flash:** Takes the user's basic theme (e.g., "Ocean Waves") and uses its advanced reasoning capabilities to write a detailed, highly-optimized prompt.
 2. **Nano Banana:** Generates high-fidelity, artistic motif designs using its advanced image generation capabilities across various artistic styles.
@@ -53,7 +53,7 @@ LOCATION="your-gcp-region" # use "global" as Nano Banana 2 only supports global 
 BUCKET_NAME="your-cloud-storage-bucket-name"
 ```
 ### Step 2: Authenticate with Google Cloud
-To allow the application to interact with Vertex AI and Cloud Storage, you need to authenticate your local environment with your Google Cloud account. Run the following command in your terminal:
+To allow the application to interact with Agent Platform and Cloud Storage, you need to authenticate your local environment with your Google Cloud account. Run the following command in your terminal:
 code
 Bash
 gcloud auth application-default login

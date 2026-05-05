@@ -152,29 +152,13 @@ def multi_angle_helmet_editor(
         logo_bytes = get_image_bytes(logo_path)
         ref_bytes = get_image_bytes(reference_path) # Compresses the 1.3MB PNG to JPEG
         
-        try:
-            response = client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    helmet_editor_prompt,
-                    types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
-                ],
-                config = types.GenerateContentConfig(
-                    response_modalities=["IMAGE"],
-                    image_config = types.ImageConfig(aspect_ratio="16:9"),
-                ),
-            )
-        except Exception as primary_err:
-            print(f"WARNING: Vertex AI failed: {str(primary_err)}. Retrying with Developer API...")
-            response = dev_client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
-                contents=[
-                    helmet_editor_prompt,
-                    types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
-                    types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
+        response = client.models.generate_content(
+            model='gemini-3.1-flash-image-preview',
+            contents=[
+                helmet_editor_prompt,
+                types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
+                types.Part.from_bytes(data=logo_bytes, mime_type="image/jpeg"),
+                types.Part.from_bytes(data=ref_bytes, mime_type="image/jpeg")
                 ],
                 config = types.GenerateContentConfig(
                     response_modalities=["IMAGE"],
@@ -303,6 +287,7 @@ def get_image_bytes(path_or_bytes: any, target_format: str = "JPEG", quality: in
             blob = bucket.blob(blob_name)
             img_data = blob.download_as_bytes()
             img = PIL_Image.open(io.BytesIO(img_data))
+            
         elif "storage.googleapis.com" in path_or_bytes:
             # Handle public GCS URL - extract bucket and blob
             # https://storage.googleapis.com/bucket-name/filename
@@ -314,10 +299,12 @@ def get_image_bytes(path_or_bytes: any, target_format: str = "JPEG", quality: in
             blob = bucket.blob(blob_name)
             img_data = blob.download_as_bytes()
             img = PIL_Image.open(io.BytesIO(img_data))
+
         elif path_or_bytes.startswith("http://") or path_or_bytes.startswith("https://"):
             resp = requests.get(path_or_bytes)
             resp.raise_for_status()
             img = PIL_Image.open(io.BytesIO(resp.content))
+
         else:
             # Assume it's a local file path
             # Try several possible locations for the asset

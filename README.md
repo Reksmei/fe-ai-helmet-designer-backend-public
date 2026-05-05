@@ -11,7 +11,7 @@ The Formula E AI Helmet Designer is an interactive Generative Media application 
 The full application is split into a React (Next.js) frontend and a Python (FastAPI) backend (which you're find out more about in this public repository), all deployed on a highly scalable Cloud Run instance. The backend acts as an orchestrator, securely connecting user inputs to a suite of Vertex AI models and managing asset storage via Google Cloud Storage.
 
 1. **Gemini 3 Flash:** Takes the user's basic theme (e.g., "Ocean Waves") and uses its advanced reasoning capabilities to write a detailed, highly-optimized prompt.
-2. **Imagen 4:** Generates high-fidelity, artistic motif designs using its advanced image generation capabilities across various artistic styles.
+2. **Nano Banana:** Generates high-fidelity, artistic motif designs using its advanced image generation capabilities across various artistic styles.
 3. **Nano Banana 2:** Acts as the image editor and compositor, seamlessly wrapping the chosen motif and a the user's favorite racing team's logo onto a blank Formula E helmet template.
 4. **Veo 3.1:** Animates the final 2D image into a seamless, rotating 3D product ad using enhanced camera controls and image-to-video capabilities.
 

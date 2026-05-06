@@ -1,6 +1,6 @@
 # Formula E AI Helmet Designer🏎️
 
-![UI Example](https://storage.googleapis.com/fe-demo-branding/ui-example.png)
+![UI Example](https://storage.googleapis.com/fe-demo-branding/example_helmet_output_page)
 
 The Formula E AI Helmet Designer is an interactive Generative Media application built on Google Cloud that allows users to design custom Formula E helmets from their imagination. Users choose a theme or motif, and a combination of state-of-the-art AI models brings their creation to life in high quality, complete with brand integrations and a 3D animated video.
 

@@ -29,6 +29,36 @@ client = genai.Client(
 # Create Cloud Storage Client
 storage_client = storage.Client(project=os.getenv("PROJECT_ID"))
 
+def prompt_rewriter(prompt: str = Form(...)):
+    system_instruction = '''
+                You are an artistic helmet designer as well as an expert prompt engineer, and are helping Formula E fans prompt Nano Banana on Agent Platform to create a design/motif of their choice for a Formula E helmet.
+                Your Goal: To rewrite their existing prompt with a new, ready to use one that is suitable and will generate a high quality output from Imagen, that can then be used by a different software to create a net and to add branding overlay to.
+                You will be sent a basic prompt such as "ocean waves" or "coconuts and palm trees".
+
+                Key things to keep in mind:
+                You are NOT prompting to generate a picture of a helmet with the fan's design - adapting this and sculpting it to fit a helmet net as another software's job- the rewritten prompt is just for a design/motif
+                When rewriting the prompt, it needs to keep the core essentials of the original prompt and not try to be too clever - e.g. an initial prompt with coconuts & palm trees should not be rewritten as "a photorealistic background of cancun, mexico" (which happens to have palm trees & coconuts)
+                IT MUST NOT CONTAIN A CAR or a car with that motif on it (the only acceptable use of a car is if the initial prompt is car related - e.g. taxis) - this prompt is just meant for artwork/motifs
+                YOU MUST OUTPUT JUST the updated prompt, you must NOT output "that sounds like a great idea" and "this is my suggested option".
+                Do not output anything that sounds self-aware such as "I'd love to help you with that, here's an option..."
+                Don't say at the end, anything along the lines of "would you like me to try another one?
+                YOU MUST ALSO BE CULTURALLY SENSITIVE AND IP SENSITIVE, to avoid causing unintended harm, so for instance if the original prompt is Japan - do not output anything containing the Rising Sun flag.
+                '''
+
+            print("DEBUG: Attempting prompt rewrite with Vertex AI...")
+            response = client.models.generate_content(
+                model="gemini-3.5-flash",
+                contents=[prompt],
+                config=types.GenerateContentConfig(
+                    system_instruction=system_instruction,
+                    temperature=1.2,
+                    max_output_tokens=2000,
+                )
+            )
+        return {"rewritten_prompt": response.text,
+                "original_prompt": prompt
+            }
+
 def generate_image(prompt: str = Form(...), original_prompt: str = Form("design")):
     try:
         urls = []
@@ -351,36 +381,6 @@ def get_image_bytes(path_or_bytes: any, target_format: str = "JPEG", quality: in
     buf = io.BytesIO()
     img.save(buf, format=target_format, quality=quality)
     return buf.getvalue()
-
-def prompt_rewriter(prompt: str = Form(...)):
-    system_instruction = '''
-                You are an artistic helmet designer as well as an expert prompt engineer, and are helping Formula E fans prompt Nano Banana on Agent Platform to create a design/motif of their choice for a Formula E helmet.
-                Your Goal: To rewrite their existing prompt with a new, ready to use one that is suitable and will generate a high quality output from Imagen, that can then be used by a different software to create a net and to add branding overlay to.
-                You will be sent a basic prompt such as "ocean waves" or "coconuts and palm trees".
-
-                Key things to keep in mind:
-                You are NOT prompting to generate a picture of a helmet with the fan's design - adapting this and sculpting it to fit a helmet net as another software's job- the rewritten prompt is just for a design/motif
-                When rewriting the prompt, it needs to keep the core essentials of the original prompt and not try to be too clever - e.g. an initial prompt with coconuts & palm trees should not be rewritten as "a photorealistic background of cancun, mexico" (which happens to have palm trees & coconuts)
-                IT MUST NOT CONTAIN A CAR or a car with that motif on it (the only acceptable use of a car is if the initial prompt is car related - e.g. taxis) - this prompt is just meant for artwork/motifs
-                YOU MUST OUTPUT JUST the updated prompt, you must NOT output "that sounds like a great idea" and "this is my suggested option".
-                Do not output anything that sounds self-aware such as "I'd love to help you with that, here's an option..."
-                Don't say at the end, anything along the lines of "would you like me to try another one?
-                YOU MUST ALSO BE CULTURALLY SENSITIVE AND IP SENSITIVE, to avoid causing unintended harm, so for instance if the original prompt is Japan - do not output anything containing the Rising Sun flag.
-                '''
-
-            print("DEBUG: Attempting prompt rewrite with Vertex AI...")
-            response = client.models.generate_content(
-                model="gemini-3-flash-preview",
-                contents=[prompt],
-                config=types.GenerateContentConfig(
-                    system_instruction=system_instruction,
-                    temperature=1.2,
-                    max_output_tokens=2000,
-                )
-            )
-        return {"rewritten_prompt": response.text,
-                "original_prompt": prompt
-            }
 
     except Exception as e:
         print(f"ERROR: Prompt rewriting failed: {str(e)}")

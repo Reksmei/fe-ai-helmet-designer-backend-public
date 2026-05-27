@@ -19,9 +19,9 @@ import gcs_utils
 
 load_dotenv()
 
-# Initialize client for Vertex AI
+# Initialize client for Agent Platform
 client = genai.Client(
-    vertexai=True, 
+    enterprise=True, 
     project=os.getenv("PROJECT_ID"), 
     location=os.getenv("LOCATION")
 )

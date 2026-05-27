@@ -21,7 +21,7 @@ load_dotenv()
 
 # Initialize client for Vertex AI
 client = genai.Client(
-    vertexai=True, 
+    enterprise=True, 
     project=os.getenv("PROJECT_ID"), 
     location=os.getenv("LOCATION")
 )

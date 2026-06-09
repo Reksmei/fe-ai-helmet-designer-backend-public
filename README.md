@@ -38,8 +38,8 @@ Nano Banana 2 is Google Cloud's state-of-the-art image generation and editing mo
 ## How to Run the Backend Locally
 
 ### Prerequisites
-* Python 3.8+
-* Node.js & npm
+* Python 3.10+
+* Node.js & npm (for separate frontend)
 * Google Cloud CLI (`gcloud`)
 
 

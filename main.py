@@ -35,30 +35,30 @@ app.add_middleware(
 )
 
 @app.post("/prompt_rewriter")
-async def fastapi_prompt_rewriter(prompt: str = Form(...)):
+def fastapi_prompt_rewriter(prompt: str = Form(...)):
     # prompt_rewriter function with gemini_utils.py to rewrite prompt for Imagen 
-    return await gemini_utils.prompt_rewriter(prompt=prompt)
+    return gemini_utils.prompt_rewriter(prompt=prompt)
 
 
 @app.post("/generate_image")
-async def fastapi_generate_image(prompt: str = Form(...)):
+def fastapi_generate_image(prompt: str = Form(...)):
     return gemini_utils.generate_image(prompt=prompt)
 
 @app.post("/helmet_editor")
-async def fastapi_helmet_editor(motif_url: str = Form(...),
+def fastapi_helmet_editor(motif_url: str = Form(...),
     logo_path: str = Form(...),
     reference_path: str = Form("../Frontend/public/reference-images/formula-e-helmet-blank-helmet.jpg")):
     # Call helmet_editor function with gemini_utils.py to generate helmet with single, center angle
     return await gemini_utils.helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
     
 @app.post("/multi_angle_helmet_editor")
-async def fastapi_multi_angle_helmet_editor(
+def fastapi_multi_angle_helmet_editor(
     motif_url: str = Form(...),
     logo_path: str = Form(...),
     reference_path: str = Form("../Frontend/public/reference-images/hankook_formula-e-helmet-blank-helmet_multi_angle.png")
 ):
     # Call multi_angle_helmet_editor function with gemini_utils.py to generate helmet with left, center and right angles
-    return await gemini_utils.multi_angle_helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
+    return gemini_utils.multi_angle_helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
     
 @app.post("/helmet_animator")
 async def fastapi_helmet_animator(image_url: str = Form(...)):
@@ -66,12 +66,12 @@ async def fastapi_helmet_animator(image_url: str = Form(...)):
     return await veo_utils.helmet_animator(image_url=image_url)
 
 @app.post("/net_generator")
-async def fastapi_net_generator(
+def fastapi_net_generator(
     image_url: str = Form(...), 
     reference_path: str = Form("../Frontend/public/reference-images/blank-net-side1.png")
 ):
     # Call net_generator function with gemini_utils.py to generate net image and pdf
-    return await gemini_utils.net_generator(image_url=image_url, reference_path=reference_path)
+    return gemini_utils.net_generator(image_url=image_url, reference_path=reference_path)
 
 if __name__ == "__main__":
     import uvicorn

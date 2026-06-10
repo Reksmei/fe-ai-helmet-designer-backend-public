@@ -9,3 +9,4 @@ pydantic
 qrcode
 pillow
 fpdf2
+asyncio

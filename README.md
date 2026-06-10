@@ -19,6 +19,20 @@ The full application is split into a React (Next.js) frontend and a Python (Fast
 
 <br clear="all"/>
 
+---
+
+## Project structure
+
+- **main.py**: Entry point to the FastAPI application, that calls the imported functions from the other modules for text, audio and video generation, as well as updating the database and storage buckets
+- **gemini_utils.py**: Manages the logic behind the authentication and API calls to the Gemini and Nano Banana models for prompt enhancement, motif generation and image editing. It contains the prompt for accurately mapping the motif and team name onto a blank helmet
+- **veo_utils.py**: Manages the logic behind the authentication and API calls to Veo for video generation, and contains the prompt for generating the rotating product animation.
+- **gcs_utils.py**: Manages the logic for uploading generated image and video to Cloud Storage.
+
+The propietary application uses a React & Next.js Frontend to interact with the backend.
+
+---
+
+
 ## Use Cases with Nano Banana 2
 
 Nano Banana 2 is Google Cloud's state-of-the-art image generation and editing model, balancing photorealistisic quality with speed. Beyond this helmet design demo, Nano Banana 2 unlocks powerful enterprise use cases:

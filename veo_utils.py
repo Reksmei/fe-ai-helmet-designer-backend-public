@@ -20,11 +20,11 @@ import gcs_utils
 load_dotenv()
 
 # Initialize client for Agent Platform
-client = genai.Client(
+aclient = genai.Client(
     enterprise=True, 
     project=os.getenv("PROJECT_ID"), 
     location=os.getenv("LOCATION")
-)
+).aio
 
 async def helmet_animator(image_url: str = Form(...)):
     """
@@ -47,7 +47,7 @@ async def helmet_animator(image_url: str = Form(...)):
         bucket_name = "helmet-images-output"
         gs_uri = f"gs://{bucket_name}/{filename}"
 
-        operation = client.models.generate_videos(
+        operation = aclient.models.generate_videos(
             model='veo-3.1-generate-001',
             prompt=prompt,
             config=types.GenerateVideosConfig(

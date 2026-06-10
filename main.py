@@ -18,6 +18,7 @@ import gemini_utils
 import veo_utils
 from PIL import Image as PIL_Image
 from fpdf import FPDF
+import asyncio
 
 
 load_dotenv()
@@ -36,7 +37,7 @@ app.add_middleware(
 @app.post("/prompt_rewriter")
 async def fastapi_prompt_rewriter(prompt: str = Form(...)):
     # prompt_rewriter function with gemini_utils.py to rewrite prompt for Imagen 
-    return gemini_utils.prompt_rewriter(prompt=prompt)
+    return await gemini_utils.prompt_rewriter(prompt=prompt)
 
 
 @app.post("/generate_image")
@@ -48,7 +49,7 @@ async def fastapi_helmet_editor(motif_url: str = Form(...),
     logo_path: str = Form(...),
     reference_path: str = Form("../Frontend/public/reference-images/formula-e-helmet-blank-helmet.jpg")):
     # Call helmet_editor function with gemini_utils.py to generate helmet with single, center angle
-    return gemini_utils.helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
+    return await gemini_utils.helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
     
 @app.post("/multi_angle_helmet_editor")
 async def fastapi_multi_angle_helmet_editor(
@@ -57,7 +58,8 @@ async def fastapi_multi_angle_helmet_editor(
     reference_path: str = Form("../Frontend/public/reference-images/hankook_formula-e-helmet-blank-helmet_multi_angle.png")
 ):
     # Call multi_angle_helmet_editor function with gemini_utils.py to generate helmet with left, center and right angles
-    return gemini_utils.multi_angle_helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
+    return await gemini_utils.multi_angle_helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
+    
 @app.post("/helmet_animator")
 async def fastapi_helmet_animator(image_url: str = Form(...)):
     # Call helmet_animator function with veo_utils.py to generate rotating helmet video

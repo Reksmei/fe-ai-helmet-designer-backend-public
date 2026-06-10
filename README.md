@@ -59,11 +59,11 @@ Nano Banana 2 is Google Cloud's state-of-the-art image generation and editing mo
 
 ### Step 1: Clone the Repository & Configure Environment Variables
 First, clone the repository to your local machine. Then, create a .env file in the root of your project directory.
-You will need to add the environment variables found in main.py and replace the placeholder values in .env with your actual Google Cloud project details:
+You will need to create a .env file, and add your actual Google Cloud project details:
 code
 ```
 PROJECT_ID="your-google-cloud-project-id"
-LOCATION="your-gcp-region" # use "global" as Nano Banana 2 only supports global at present
+LOCATION="your-gcp-region" # use "global" unless you have data residency requirements
 BUCKET_NAME="your-cloud-storage-bucket-name"
 ```
 ### Step 2: Authenticate with Google Cloud

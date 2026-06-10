@@ -49,7 +49,7 @@ def fastapi_helmet_editor(motif_url: str = Form(...),
     logo_path: str = Form(...),
     reference_path: str = Form("../Frontend/public/reference-images/formula-e-helmet-blank-helmet.jpg")):
     # Call helmet_editor function with gemini_utils.py to generate helmet with single, center angle
-    return await gemini_utils.helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
+    return gemini_utils.helmet_editor(motif_url=motif_url, logo_path=logo_path, reference_path=reference_path)
     
 @app.post("/multi_angle_helmet_editor")
 def fastapi_multi_angle_helmet_editor(

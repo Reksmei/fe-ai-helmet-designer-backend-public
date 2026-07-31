@@ -33,7 +33,7 @@ import gcs_utils
 
 load_dotenv()
 
-# Initialize client for Vertex AI
+# Initialize client for Agent Platform
 client = genai.Client(
     enterprise=True, 
     project=os.getenv("PROJECT_ID"), 
@@ -43,6 +43,7 @@ client = genai.Client(
 # Create Cloud Storage Client
 storage_client = storage.Client(project=os.getenv("PROJECT_ID"))
 
+# Generate a rewritten prompt to to send to Nano Banana
 def prompt_rewriter(prompt: str = Form(...)):
     system_instruction = '''
                 You are an artistic helmet designer as well as an expert prompt engineer, and are helping Formula E fans prompt Nano Banana on Agent Platform to create a design/motif of their choice for a Formula E helmet.
@@ -61,7 +62,7 @@ def prompt_rewriter(prompt: str = Form(...)):
 
             print("DEBUG: Attempting prompt rewrite with Vertex AI...")
             response = client.models.generate_content(
-                model="gemini-3.5-flash",
+                model="gemini-3.5-flash-lite",
                 contents=[prompt],
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
@@ -73,12 +74,13 @@ def prompt_rewriter(prompt: str = Form(...)):
                 "original_prompt": prompt
             }
 
+# Generate a single motif with Nano Banana 2
 def generate_image(prompt: str = Form(...), original_prompt: str = Form("design")):
     try:
         urls = []
         for i in range(3):
             response = client.models.generate_content(
-                model="gemini-2.5-flash-image",
+                model="gemini-3.1-flash-lite-image",
                 contents=[prompt],
                 config=types.GenerateContentConfig(
                 response_modalities=["IMAGE"],
@@ -105,7 +107,7 @@ def generate_image(prompt: str = Form(...), original_prompt: str = Form("design"
 
         return {"urls": urls}
 
-# To get a helmet image with just the forward facing angle
+# Generate a helmet image with just the forward facing angle
 def helmet_editor(
     motif_url: str = Form(...),
     logo_path: str = Form(...),
@@ -137,7 +139,7 @@ def helmet_editor(
     ref_bytes = get_image_bytes(reference_path)
         
     response = client.models.generate_content(
-        model='gemini-3.1-flash-image-preview',
+        model='gemini-3.1-flash-image',
         contents=[
         helmet_editor_prompt,
         types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
@@ -168,7 +170,7 @@ def helmet_editor(
             "qr_code_base64": gcs_utils.generate_qr_base64(image_url)
         }
 
-# To get a helmet image with multiple angles of the helmet
+# Generate a helmet image with multiple angles of the helmet
 def multi_angle_helmet_editor(
     motif_url: str = Form(...),
     logo_path: str = Form(...),
@@ -197,7 +199,7 @@ def multi_angle_helmet_editor(
         ref_bytes = get_image_bytes(reference_path) # Compresses the 1.3MB PNG to JPEG
         
         response = client.models.generate_content(
-            model='gemini-3.1-flash-image-preview',
+            model='gemini-3.1-flash-image',
             contents=[
                 helmet_editor_prompt,
                 types.Part.from_bytes(data=motif_bytes, mime_type="image/jpeg"),
@@ -267,7 +269,7 @@ async def net_generator(
 
         try:
             response = client.models.generate_content(
-                model='gemini-3.1-flash-image-preview',
+                model='gemini-3.1-flash-image',
                 contents=[
                     prompt,
                     types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"),

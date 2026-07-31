@@ -6,7 +6,7 @@ The Formula E AI Helmet Designer is an interactive Generative Media application 
 
 ## How it Works: Solution Architecture
 
-<img src="https://storage.googleapis.com/fe-demo-branding/formula_e_helmet_demo_architecture.png" alt="Architecture Breakdown" align="right" width="450">
+<img src="https://storage.googleapis.com/ai-pg-demo-media/formula_e_helmet_demo_architecture.png" alt="Architecture Breakdown" align="right" width="450">
 
 The full application is split into a React (Next.js) frontend and a Python (FastAPI) backend (which you're find out more about in this public repository), all deployed on a highly scalable Cloud Run instance. The backend acts as an orchestrator, securely connecting user inputs to a suite of Google Cloud Agent Platform models and managing asset storage via Cloud Storage.
 
